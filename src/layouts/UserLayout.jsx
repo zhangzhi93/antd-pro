@@ -1,56 +1,113 @@
-import SelectLang from '@/components/SelectLang';
+/**
+ * Ant Design Pro v4 use `@ant-design/pro-layout` to handle Layout.
+ * You can view component api by:
+ * https://github.com/ant-design/ant-design-pro-layout
+ */
+import RightContent from '@/components/GlobalHeader/RightContent';
 import { connect } from 'dva';
-import React from 'react';
-import DocumentTitle from 'react-document-title';
-import { formatMessage } from 'umi-plugin-react/locale';
-import Link from 'umi/link';
+import React, { useState } from 'react';
 import logo from '../assets/logo.svg';
-import styles from './UserLayout.less';
-import { getPageTitle, getMenuData, DefaultFooter } from '@ant-design/pro-layout';
+import Authorized from '@/utils/Authorized';
+import { formatMessage } from 'umi-plugin-react/locale';
+import { isAntDesignPro } from '@/utils/utils';
+import { BasicLayout as ProLayoutComponents } from '@ant-design/pro-layout';
+import Link from 'umi/link';
 
-const UserLayout = props => {
-  const {
-    route = {
-      routes: [],
-    },
-  } = props;
-  const { routes = [] } = route;
-  const {
-    children,
-    location = {
-      pathname: '',
-    },
-  } = props;
-  const { breadcrumb } = getMenuData(routes, props);
+/**
+ * use Authorized check all menu item
+ */
+const menuDataRender = menuList => {
+  return menuList.map(item => {
+    const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
+    return Authorized.check(item.authority, localItem, null);
+  });
+};
+
+const footerRender = (_, defaultDom) => {
+  if (!isAntDesignPro()) {
+    return defaultDom;
+  }
+
   return (
-    <DocumentTitle
-      title={getPageTitle({
-        pathname: location.pathname,
-        breadcrumb,
-        formatMessage,
-        ...props,
-      })}
-    >
-      <div className={styles.container}>
-        <div className={styles.lang}>
-          <SelectLang />
-        </div>
-        <div className={styles.content}>
-          <div className={styles.top}>
-            <div className={styles.header}>
-              <Link to="/">
-                <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>Ant Design</span>
-              </Link>
-            </div>
-            <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
-          </div>
-          {children}
-        </div>
-        <DefaultFooter />
+    <>
+      {defaultDom}
+      <div
+        style={{
+          padding: '0px 24px 24px',
+          textAlign: 'center',
+        }}
+      >
+        <a href="https://www.netlify.com" target="_blank">
+          <img
+            src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
+            width="82px"
+            alt="netlify logo"
+          />
+        </a>
       </div>
-    </DocumentTitle>
+    </>
   );
 };
 
-export default connect(({ settings }) => ({ ...settings }))(UserLayout);
+const BasicLayout = props => {
+  const { dispatch, children, settings } = props;
+  /**
+   * constructor
+   */
+
+  useState(() => {
+    if (dispatch) {
+      dispatch({
+        type: 'user/fetchCurrent',
+      });
+      dispatch({
+        type: 'settings/getSetting',
+      });
+    }
+  });
+  /**
+   * init variables
+   */
+
+  const handleMenuCollapse = payload =>
+    dispatch &&
+    dispatch({
+      type: 'global/changeLayoutCollapsed',
+      payload,
+    });
+
+  return (
+    <ProLayoutComponents
+      logo={logo}
+      onCollapse={handleMenuCollapse}
+      menuItemRender={(menuItemProps, defaultDom) => {
+        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+      }}
+      breadcrumbRender={(routers = []) => {
+        return [
+          {
+            path: '/',
+            breadcrumbName: formatMessage({
+              id: 'menu.home',
+              defaultMessage: 'Home',
+            }),
+          },
+          ...routers,
+        ];
+      }}
+      footerRender={footerRender}
+      menuDataRender={menuDataRender}
+      formatMessage={formatMessage}
+      rightContentRender={rightProps => <RightContent {...rightProps} />}
+      {...props}
+      {...settings}
+    >
+      {children}
+    </ProLayoutComponents>
+  );
+};
+
+export default connect(({ global, settings }) => ({
+  collapsed: global.collapsed,
+  settings,
+}))(BasicLayout);
