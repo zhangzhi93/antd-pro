@@ -1,5 +1,7 @@
 # Ant Design Pro
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/zhangzhi93/antd-pro.svg?token=8e2054d4f6c7dfc0edc8aa352807579c65d61d8726b258f2eef636dc603e3d29&ts=1560384483804)](https://greenkeeper.io/)
+
 This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
 
 ## Environment Prepare
