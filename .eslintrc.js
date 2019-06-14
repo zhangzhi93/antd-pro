@@ -14,8 +14,10 @@ module.exports = {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: true,
   },
   rules: {
-    'react/jsx-filename-extension': [1, { extensions: ['.js','.jsx'] }],
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
     'react/jsx-wrap-multilines': 0,
+    'no-plusplus': 0,
+    'no-unused-vars': 1,
     'react/prop-types': 0,
     'react/forbid-prop-types': 0,
     'react/jsx-one-expression-per-line': 0,

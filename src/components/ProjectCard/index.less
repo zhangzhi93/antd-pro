@@ -1,0 +1,30 @@
+.card {
+  height: 310px;
+  background: #fff;
+  position: relative;
+  border-radius: 0.1rem;
+  :global {
+    .ant-card-cover {
+      height: 200px;
+      img {
+        height: 100%;
+      }
+    }
+    .ant-card-body {
+      padding: 20px;
+    }
+    .ant-card-meta-description {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 100%;
+    }
+    .ant-card-meta-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .ant-card-meta-detail>div:not(:last-child) {
+      margin-bottom: 0;
+    }
+  }
+}
