@@ -18,6 +18,7 @@ module.exports = {
     'react/jsx-wrap-multilines': 0,
     'no-plusplus': 0,
     'no-unused-vars': 1,
+    'no-undef': 1,
     'react/prop-types': 0,
     'react/forbid-prop-types': 0,
     'react/jsx-one-expression-per-line': 0,

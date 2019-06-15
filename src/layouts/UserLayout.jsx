@@ -5,7 +5,7 @@ import { Layout } from 'antd';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content } = Layout;
 
 @connect(({ global, settings }) => ({ global, settings }))
 class DashboardLayout extends Component {
@@ -21,7 +21,7 @@ class DashboardLayout extends Component {
     return (
       <Layout>
         <Header className={styles.header}>
-          <div className="logo" />
+          <div className={styles.logo}>易制片</div>
         </Header>
         <Content className={styles.content}>
           {children}
