@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import Link from 'umi/link';
+import { routerRedux } from 'dva/router';
 import { Form, Icon, Input, Button, Checkbox, Tabs } from 'antd'
 import defaultSettings from '../../config/defaultSettings';
+import axios from '@/utils/axios';
 import styles from './LoginLayout.less';
 
 const FormItem = Form.Item;
@@ -42,11 +43,17 @@ class LoginLayout extends Component {
         return;
       }
       dispatch({
-        type: 'login/login',
+        type: 'login/UserLogin',
         payload: {
-          appId: values.remember,
+          appId: 2,
           loginName: values.name,
           password: values.password,
+        },
+        callback: (res) => {
+          if (res.code === 0) {
+            dispatch(routerRedux.replace('/'));
+            axios.defaults.headers.token = res.data.token;
+          }
         }
       });
     })

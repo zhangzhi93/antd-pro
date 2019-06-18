@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import Link from 'umi/link';
 import { Layout } from 'antd';
+import Link from 'umi/link';
+import config from '../../config/defaultSettings';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
 
@@ -21,7 +22,9 @@ class DashboardLayout extends Component {
     return (
       <Layout>
         <Header className={styles.header}>
-          <div className={styles.logo}>易制片</div>
+          <Link to="/">
+            <div className={styles.logo}>{config.title}</div>
+          </Link>
         </Header>
         <Content className={styles.content}>
           {children}

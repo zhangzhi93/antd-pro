@@ -109,7 +109,7 @@ export default {
         path: '/',
         name: 'dashboard',
         icon: 'smile',
-        component: './Dashboard',
+        component: './Dashboard/index',
       }, {
         path: '/console',
         name: 'console',
@@ -117,8 +117,14 @@ export default {
         component: './Console',
       },
     ],
+  },],
+  proxy: {
+    "/api": {
+      "target": "http://www.easyaction.cn",
+      "changeOrigin": true,
+      "pathRewrite": { "^/api": "" }
+    }
   },
-  ],
   // Theme for antd
   // https://ant.design/docs/react/customize-theme-cn
   theme: {

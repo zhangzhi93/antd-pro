@@ -13,4 +13,8 @@ export default {
   title: '易制片',
   pwa: false,
   iconfontUrl: '',
+  formItemLayout: {
+    labelCol: { span: 6 },
+    wrapperCol: { span: 18 },
+  }
 };
