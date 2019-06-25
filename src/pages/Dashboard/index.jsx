@@ -60,7 +60,7 @@ class DashboardContent extends Component {
               {
                 col.map(item => (
                   <Col span={6}>
-                    <Card projectInfo={item} key={item.projectId} />
+                    <Card projectInfo={item} to={item.projectId} key={item.projectId} />
                   </Col>
                 ))
               }

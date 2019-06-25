@@ -100,6 +100,35 @@ export default {
     path: '/login',
     component: '../layouts/LoginLayout',
   }, {
+    path: '/project/:id',
+    hideInMenu:true,
+    component: '../layouts/$BasicLayout',
+    routes: [
+      { path: '/project/:id', redirect: '/project/:id/dit/notice' },
+      {
+        path: '/project/:id/dit',
+        name: 'DIT',
+        routes: [
+          {
+            path: '/project/:id/dit/notice',
+            name: '通告',
+            component: './DIT/Notice/index',
+          },
+        ],
+      },
+      {
+        path: '/project/:id/overall',
+        name: '统筹',
+        routes: [
+          {
+            path: '/project/:id/overall/list',
+            name: '场次',
+            component: './Overall/List/index',
+          },
+        ],
+      },
+    ],
+  }, {
     path: '/',
     component: '../layouts/UserLayout',
     Routes: ['src/pages/Authorized'],

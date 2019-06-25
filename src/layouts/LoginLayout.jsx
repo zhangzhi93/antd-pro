@@ -4,7 +4,7 @@ import { routerRedux } from 'dva/router';
 import { Form, Icon, Input, Button, Checkbox, Tabs } from 'antd'
 import defaultSettings from '../../config/defaultSettings';
 import axios from '@/utils/axios';
-import styles from './LoginLayout.less';
+import styles from './Layout.less';
 
 const FormItem = Form.Item;
 const TabsTabPane = Tabs.TabPane;
@@ -53,6 +53,7 @@ class LoginLayout extends Component {
           if (res.code === 0) {
             dispatch(routerRedux.replace('/'));
             axios.defaults.headers.token = res.data.token;
+            window.localStorage.setItem('token', res.data.token);
           }
         }
       });

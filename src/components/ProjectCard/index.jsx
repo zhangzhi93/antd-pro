@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import Link from 'umi/link';
+import router from 'umi/router';
 import { Card, Avatar } from 'antd';
 import styles from './index.less';
 
@@ -14,13 +14,21 @@ class ProjectCard extends Component {
     };
   }
 
+  jumpTo = (to) => {
+    if (to) {
+      router.push(`/project/${to}`)
+    }
+  }
+
   render() {
-    const { projectInfo } = this.props;
+    const { projectInfo, to } = this.props;
+
     return (
       <Card
         hoverable
         className={styles.card}
         cover={<img alt={projectInfo.name} src={projectInfo.pictureUrl[0]} />}
+        onClick={() => { this.jumpTo(to) }}
       >
         <Meta title={projectInfo.name} description={projectInfo.remark} />
         <div className={styles.bottominfo}>

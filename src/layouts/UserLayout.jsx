@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 import Link from 'umi/link';
 import config from '../../config/defaultSettings';
 import styles from './UserLayout.less';
-import logo from '../assets/logo.svg';
+// import logo from '../assets/logo.svg';
 
 const { Header, Content } = Layout;
 

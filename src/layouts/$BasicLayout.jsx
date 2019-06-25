@@ -3,15 +3,16 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import RightContent from '@/components/GlobalHeader/RightContent';
-import { connect } from 'dva';
 import React, { useState } from 'react';
-import logo from '../assets/logo.svg';
+import { connect } from 'dva';
+import Link from 'umi/link';
 import Authorized from '@/utils/Authorized';
+import RightContent from '@/components/GlobalHeader/RightContent';
+import { BasicLayout as ProLayoutComponents } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi-plugin-react/locale';
 import { isAntDesignPro } from '@/utils/utils';
-import { BasicLayout as ProLayoutComponents } from '@ant-design/pro-layout';
-import Link from 'umi/link';
+// import logo from '../assets/logo.svg';
+
 
 /**
  * use Authorized check all menu item
@@ -23,43 +24,23 @@ const menuDataRender = menuList => {
   });
 };
 
-const footerRender = (_, defaultDom) => {
-  if (!isAntDesignPro()) {
-    return defaultDom;
-  }
-
+const headerRender = (props) => {
+  const { logo } = props;
   return (
-    <>
-      {defaultDom}
-      <div
-        style={{
-          padding: '0px 24px 24px',
-          textAlign: 'center',
-        }}
-      >
-        <a href="https://www.netlify.com" target="_blank">
-          <img
-            src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
-            width="82px"
-            alt="netlify logo"
-          />
-        </a>
-      </div>
-    </>
-  );
+    <div>
+      {logo}
+    </div>
+  )
 };
 
 const BasicLayout = props => {
-  const { dispatch, children, settings } = props;
+  const { dispatch, children, settings, match: { params: { id } } } = props;
   /**
    * constructor
    */
 
   useState(() => {
     if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
       dispatch({
         type: 'settings/getSetting',
       });
@@ -69,19 +50,14 @@ const BasicLayout = props => {
    * init variables
    */
 
-  const handleMenuCollapse = payload =>
-    dispatch &&
-    dispatch({
-      type: 'global/changeLayoutCollapsed',
-      payload,
-    });
-
   return (
     <ProLayoutComponents
-      logo={logo}
-      onCollapse={handleMenuCollapse}
+      logo={null}
+      onCollapse={false}
+      collapsed={false}
+      siderWidth={200}
       menuItemRender={(menuItemProps, defaultDom) => {
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        return <Link to={menuItemProps.path.replace(/:id/, id)}>{defaultDom}</Link>;
       }}
       breadcrumbRender={(routers = []) => {
         return [
@@ -95,7 +71,7 @@ const BasicLayout = props => {
           ...routers,
         ];
       }}
-      footerRender={footerRender}
+      footerRender={false}
       menuDataRender={menuDataRender}
       formatMessage={formatMessage}
       rightContentRender={rightProps => <RightContent {...rightProps} />}

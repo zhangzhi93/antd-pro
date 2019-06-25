@@ -5,13 +5,18 @@ import { message } from 'antd';
 const instance = axios.create({
   baseURL: '/api/',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'token': window.localStorage.getItem('token')
   },
   // 超时为5s 上线后是3s
   timeout: 5000,
   paramsSerializer: (params) => {
     return Qs.stringify(params, { arrayFormat: 'brackets' });
   },
+  transformRequest: [data => {
+    // 对 data 进行任意转换处理
+    return Qs.stringify(data); // 编码格式
+  }],
 });
 
 // 请求拦截处理

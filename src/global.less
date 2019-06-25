@@ -1,4 +1,6 @@
+@import '~antd-table-infinity/dist/index.css';
 @import '~antd/es/style/themes/default.less';
+@blue: #008cff;
 
 html,
 body,
@@ -7,14 +9,57 @@ body,
   background-color: #f0f2f5;
 }
 
+#refLoadingPlaceholder {
+  display: none !important;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: @blue;
+}
+::-webkit-scrollbar-track {
+  background-color: #bee1eb;
+}
+
 .colorWeak {
   filter: invert(80%);
+}
+.text-nowrap-320 {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 280px;
 }
 
 .ant-layout {
   min-height: 100vh;
 }
 
+.table-container {
+  margin-top: 2px;
+}
+.ant-card.search-card {
+  .ant-card-body {
+    padding: 15px 20px;
+  }
+  .ant-form-item {
+    margin: 5px 0;
+  }
+  .ant-input,
+  .ant-select {
+    font-size: 12px;
+  }
+  .ant-btn {
+    margin-left: 10px;
+  }
+  label {
+    font-size: 12px;
+  }
+}
 canvas {
   display: block;
 }

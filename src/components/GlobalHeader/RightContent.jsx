@@ -4,7 +4,7 @@ import { formatMessage } from 'umi-plugin-react/locale';
 import HeaderSearch from '../HeaderSearch';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
-import Avatar from './AvatarDropdown';
+//import Avatar from './AvatarDropdown';
 import { connect } from 'dva';
 
 class GlobalHeaderRight extends Component {
@@ -55,7 +55,7 @@ class GlobalHeaderRight extends Component {
             <Icon type="question-circle-o" />
           </a>
         </Tooltip>
-        <Avatar />
+        {/* <Avatar /> */}
         <SelectLang className={styles.action} />
       </div>
     );
