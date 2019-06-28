@@ -24,6 +24,7 @@ module.exports = {
     'react/prop-types': 0,
     'react/forbid-prop-types': 0,
     'react/jsx-one-expression-per-line': 0,
+    'react/destructuring-assignment': 1,
     'import/no-unresolved': [2, { ignore: ['^@/', '^umi/'] }],
     'import/no-extraneous-dependencies': [
       2,
@@ -38,6 +39,7 @@ module.exports = {
     'jsx-a11y/no-static-element-interactions': 0,
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
+    'no-useless-constructor': 0,
   },
   settings: {
     // support import modules from TypeScript files in JavaScript files

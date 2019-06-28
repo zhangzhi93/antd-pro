@@ -23,16 +23,24 @@ body,
 ::-webkit-scrollbar-track {
   background-color: #bee1eb;
 }
-
+.ant-pro-global-header-trigger {
+  display: none;
+}
 .colorWeak {
   filter: invert(80%);
 }
-.text-nowrap-320 {
+
+[class^="text-nowrap-"] {
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 280px;
+}
+.text-nowrap-350 {
+  width: 320px;
+}
+.text-nowrap-200 {
+  width: 150px;
 }
 
 .ant-layout {
@@ -41,6 +49,13 @@ body,
 
 .table-container {
   margin-top: 2px;
+}
+.ant-table-thead>tr>th {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
+  text-align: left;
+  background-color: #fafafa !important;
+  transition: background .3s ease;
 }
 .ant-card.search-card {
   .ant-card-body {
@@ -60,6 +75,7 @@ body,
     font-size: 12px;
   }
 }
+
 canvas {
   display: block;
 }

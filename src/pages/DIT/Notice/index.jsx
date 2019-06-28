@@ -70,6 +70,14 @@ class NoticeList extends Component {
     })
   };
 
+  clickRow = (record, index) => {
+    // message.success(`点击行数据：${JSON.stringify(record)},点击行索引：${index}`);
+  }
+
+  clickCell = (record, index, col) => {
+    message.success(`点击单元格数据：${JSON.stringify(record)},点击单元格索引：${index}-${col}`);
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     const { form, dispatch } = this.props;
@@ -108,6 +116,11 @@ class NoticeList extends Component {
       dataIndex: 'unitName',
       key: 'unitName',
       width: 50,
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: () => { this.clickCell(record, rowIndex, 1) }
+        };
+      },
     }, {
       title: '镜次数',
       dataIndex: 'isShotExist',
@@ -115,17 +128,32 @@ class NoticeList extends Component {
       render: (text, record) => (
         <Badge count={text} />
       ),
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: () => { this.clickCell(record, rowIndex, 2) }
+        };
+      },
       width: 100,
     }, {
       title: '通告日期',
       dataIndex: 'planTime',
       key: 'planTime',
       width: 100,
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: () => { this.clickCell(record, rowIndex, 3) }
+        };
+      }
     }, {
       title: '集',
       dataIndex: 'episodeNum',
       key: 'episodeNum',
       width: 50,
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: () => { this.clickCell(record, rowIndex, 4) }
+        };
+      }
     }, {
       title: '场',
       dataIndex: 'sceneNum',
@@ -165,7 +193,10 @@ class NoticeList extends Component {
       title: '内容提示',
       dataIndex: 'summary',
       key: 'summary',
-      width: 150,
+      width: 200,
+      render: (text, record) => (
+        <p className="text-nowrap-200">{text}</p>
+      ),
     }, {
       title: '主演',
       dataIndex: 'charact1',
@@ -177,7 +208,6 @@ class NoticeList extends Component {
           }
         </div>
       ),
-      width: 250,
     }];
     return (
       <Layout>
@@ -369,10 +399,11 @@ class NoticeList extends Component {
         </Card>
         <div className="table-container">
           <PageTable
-            pagination={{
-              position: 'bottom',
-              size: 'small',
-              className: 'custom-classname-pagination',
+            key="key"
+            onRow={(record, index) => {
+              return {
+                onClick: () => { this.clickRow(record, index) }
+              };
             }}
             loading={loading}
             onFetch={this.handleFetch}
@@ -382,8 +413,13 @@ class NoticeList extends Component {
             size="small"
             dataSource={[pageIndex, recordList]}
             columns={columns}
-            scroll={{ x: 1200, y: 250 }}
+            scroll={{ x: 1500, y: 250 }}
             bordered
+            pagination={{
+              position: 'bottom',
+              size: 'small',
+              className: 'custom-classname-pagination',
+            }}
           />
         </div>
       </Layout>

@@ -114,6 +114,11 @@ export default {
             name: '通告',
             component: './DIT/Notice/index',
           },
+          {
+            path: '/project/:id/dit/shot',
+            name: '镜次表',
+            component: './DIT/Shot/index',
+          },
         ],
       },
       {
