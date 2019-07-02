@@ -40,6 +40,7 @@ module.exports = {
     'jsx-a11y/anchor-is-valid': 0,
     'linebreak-style': 0,
     'no-useless-constructor': 0,
+    'no-lone-blocks': 0,
   },
   settings: {
     // support import modules from TypeScript files in JavaScript files

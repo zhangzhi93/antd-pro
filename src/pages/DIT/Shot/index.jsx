@@ -6,15 +6,24 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import styles from './index.less';
 
-const SortableTable = SortableContainer(Table);
-
-const SortableRow = SortableElement(props => (<tr {...props} />));
+// const SortableTable = SortableContainer(Table);
+const SortableTable = SortableContainer(props => {
+  console.log(props);
+  const tbodyProps = {
+    className:props.className,
+    children:props.children
+  }
+  return (<tbody {...tbodyProps} />)
+});
 
 @connect(({ shot, loading }) => ({ shot, loading }))
 class ShotList extends Component {
+  SortableRow = SortableElement(props => (<tr {...props} index={props['data-row-key']} />));
+
   components = {
     body: {
-      row: SortableRow,
+      wrapper: (props) => (<SortableTable {...props} onSortEnd={this.sortEnd} helperClass={styles.dragTableRow} />),
+      row: this.SortableRow,
     },
   };
 
@@ -50,6 +59,8 @@ class ShotList extends Component {
       }
     })
   }
+
+
 
   sortEnd = ({ oldIndex, newIndex }) => {
     console.log(`oldIndex:${oldIndex},newIndex:${newIndex}`);
@@ -181,17 +192,14 @@ class ShotList extends Component {
 
     return (
       <Layout>
-        <SortableTable
+        <Table
           style={{ background: '#fff' }}
           loading={loading}
           rowKey="id"
-          helperClass={styles.dragTableRow}
-          helperContainer={() => document.querySelector('.ant-table-body .ant-table-fixed')}
           columns={columns}
           dataSource={data}
           onChange={this.handleTableChange}
           components={this.components}
-          onSortEnd={this.sortEnd}
           scroll={{ x: 3350, y: 400 }}
           bordered
           pagination={{
@@ -205,7 +213,7 @@ class ShotList extends Component {
           }}
           onRow={(record, index) => ({
             index,
-            moveRow: this.moveRow,
+            // moveRow: this.moveRow,
           })}
         />
       </Layout>

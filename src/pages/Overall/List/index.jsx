@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import { Layout, message, Tag } from 'antd';
-import { PageTable } from 'antd-table-infinity';
+import {PageTable} from 'antd-table-infinity';
+// import PageTable from '@/components/PageTable';
 
 const extendColumnParams = {
   projectId: {
@@ -15,11 +16,11 @@ const extendColumnParams = {
     width: 100,
   },
   episodeNum: {
-    fixed: 'left',
+    // fixed: 'left',
     width: 50,
   },
   sceneNum: {
-    fixed: 'left',
+    // fixed: 'left',
     width: 100,
   },
   location: {
@@ -74,7 +75,7 @@ const extendColumnParams = {
     width: 32,
   },
   charact2: {
-    width: 300,
+    width: 800,
     render: (text, record) => (
       <div>
         {
@@ -84,7 +85,7 @@ const extendColumnParams = {
     ),
   },
   charact4: {
-    width: 300,
+    width: 800,
     render: (text, record) => (
       <div>
         {
@@ -112,7 +113,7 @@ class SessionList extends Component {
       loading: false,
       pageIndex: 1,
       pageNum: 30,
-      data: []
+      dataList: []
     };
   }
 
@@ -172,7 +173,7 @@ class SessionList extends Component {
           this.setState({
             loading: false,
             pageIndex: page,
-            data: res.data.recordList,
+            dataList: res.data.recordList,
           });
         } else {
           message.error(res.msg);
@@ -184,7 +185,7 @@ class SessionList extends Component {
   render() {
     const { session: { getQueryTableHeadData, getQueryTableData: { recordList, totalCount } } } = this.props;
     console.log(this.props);
-    const { loading, pageIndex, pageNum, data } = this.state;
+    const { loading, pageIndex, pageNum, dataList } = this.state;
     const TableData = this.renderColumns(getQueryTableHeadData);
 
     return (
@@ -200,14 +201,13 @@ class SessionList extends Component {
               loading={loading}
               onFetch={this.handleFetch}
               pageSize={pageNum}
-              bidirectionalCachePages={3}
+              bidirectionalCachePages={1}
               total={totalCount}
               size="small"
-              dataSource={[pageIndex, recordList]}
+              dataSource={[pageIndex, dataList]}
               columns={TableData}
-              scroll={{ x: 4200, y: 400 }}
+              scroll={{ x: 5000, y: 600 }}
               bordered
-              debug
             /> : null
         }
       </Layout>

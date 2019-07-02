@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import { Layout, Button, Tag, Badge, Card, Form, Row, Col, Input, DatePicker, message, Modal, Select, InputNumber } from 'antd';
-import { PageTable } from 'antd-table-infinity';
+import PageTable from '@/components/PageTable';
 import config from '../../../../config/defaultSettings';
 
 const { confirm } = Modal;
@@ -19,6 +19,7 @@ class NoticeList extends Component {
       loading: false,
       pageIndex: 1,
       pageNum: 30,
+      dataList: [],
     };
   }
 
@@ -61,7 +62,8 @@ class NoticeList extends Component {
         if (res.code === 0) {
           this.setState({
             loading: false,
-            pageIndex: page
+            pageIndex: page,
+            dataList: res.data.recordList,
           });
         } else {
           message.error(res.msg);
@@ -92,7 +94,7 @@ class NoticeList extends Component {
           ...pagination,
           page: 1
         },
-        searchParams: values
+        // searchParams: values
       });
       const payload = {
         ...values,
@@ -108,7 +110,7 @@ class NoticeList extends Component {
 
   render() {
     const { form, notice: { getDitNotifyQueryAllData: { recordList, recordCount } } } = this.props;
-    const { loading, pageIndex, pageNum } = this.state;
+    const { loading, pageIndex, pageNum, dataList } = this.state;
     const { getFieldDecorator } = form;
 
     const columns = [{
@@ -116,6 +118,7 @@ class NoticeList extends Component {
       dataIndex: 'unitName',
       key: 'unitName',
       width: 50,
+      fixed: 'left',
       onCell: (record, rowIndex) => {
         return {
           onClick: () => { this.clickCell(record, rowIndex, 1) }
@@ -148,7 +151,7 @@ class NoticeList extends Component {
       title: '集',
       dataIndex: 'episodeNum',
       key: 'episodeNum',
-      width: 50,
+      width: 100,
       onCell: (record, rowIndex) => {
         return {
           onClick: () => { this.clickCell(record, rowIndex, 4) }
@@ -158,7 +161,10 @@ class NoticeList extends Component {
       title: '场',
       dataIndex: 'sceneNum',
       key: 'sceneNum',
-      width: 50,
+      width: 100,
+      render: (text, record) => (
+        <p className="text-nowrap-100">{text}</p>
+      ),
     }, {
       title: '时间',
       dataIndex: 'time',
@@ -174,11 +180,17 @@ class NoticeList extends Component {
       dataIndex: 'projectPlace',
       key: 'projectPlace',
       width: 150,
+      render: (text, record) => (
+        <p className="text-nowrap-150">{text}</p>
+      ),
     }, {
       title: '场景',
       dataIndex: 'location',
       key: 'location',
       width: 150,
+      render: (text, record) => (
+        <p className="text-nowrap-150">{text}</p>
+      ),
     }, {
       title: '文戏',
       dataIndex: 'wenPage',
@@ -193,10 +205,10 @@ class NoticeList extends Component {
       title: '内容提示',
       dataIndex: 'summary',
       key: 'summary',
-      width: 200,
-      render: (text, record) => (
-        <p className="text-nowrap-200">{text}</p>
-      ),
+      width: 100,
+      // render: (text, record) => (
+      //   <p className="text-nowrap-200">{text}</p>
+      // ),
     }, {
       title: '主演',
       dataIndex: 'charact1',
@@ -211,192 +223,6 @@ class NoticeList extends Component {
     }];
     return (
       <Layout>
-        <Card className="search-card">
-          <Form onSubmit={this.handleSubmit} size="small">
-            <Row>
-              <Col span={6}>
-                <FormItem label="通告日期" {...formItemLayout}>
-                  {getFieldDecorator('planDate', {
-                    rules: []
-                  })(
-                    <DatePicker
-                      format='YYYY-MM-DD'
-                      style={{ width: '100%' }}
-                      getCalendarContainer={trigger => trigger.parentNode}
-                    />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem label="场景" {...formItemLayout}>
-                  {getFieldDecorator('location', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem label="实拍地" {...formItemLayout}>
-                  {getFieldDecorator('projectPlace', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem label="内容提示" {...formItemLayout}>
-                  {getFieldDecorator('summary', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <FormItem label="组" {...formItemLayout}>
-                  {getFieldDecorator('unitId', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="A">A</Option>
-                      <Option value="B">B</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem label="角色" {...formItemLayout}>
-                  {getFieldDecorator('characters1', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem label="特约" {...formItemLayout}>
-                  {getFieldDecorator('characters4', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={6}>
-                <FormItem label="群演" {...formItemLayout}>
-                  {getFieldDecorator('characters2', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={4}>
-                <FormItem label="集" {...formItemLayout}>
-                  {getFieldDecorator('episodeNum', {
-                    rules: []
-                  })(
-                    <Input maxLength="15" placeholder="请输入" />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem label="场" {...formItemLayout}>
-                  {getFieldDecorator('sceneNum', {
-                    rules: []
-                  })(
-                    <Input maxLength="15" placeholder="请输入" />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem label="时间" {...formItemLayout}>
-                  {getFieldDecorator('time', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem label="空间" {...formItemLayout}>
-                  {getFieldDecorator('space', {
-                    rules: []
-                  })(
-                    <Select
-                      placeholder="请选择"
-                      getPopupContainer={trigger => trigger.parentNode}
-                    >
-                      <Option value="">请选择</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem label="文戏" {...formItemLayout}>
-                  {getFieldDecorator('wenPage', {
-                    rules: []
-                  })(
-                    <InputNumber min={0} max={10} step={0.1} style={{ width: '100%' }} />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col span={4}>
-                <FormItem label="武戏" {...formItemLayout}>
-                  {getFieldDecorator('wuPage', {
-                    rules: []
-                  })(
-                    <InputNumber min={0} max={10} step={0.1} style={{ width: '100%' }} />,
-                  )}
-                </FormItem>
-              </Col>
-            </Row>
-          </Form>
-        </Card>
         <div className="table-container">
           <PageTable
             key="key"
@@ -408,12 +234,12 @@ class NoticeList extends Component {
             loading={loading}
             onFetch={this.handleFetch}
             pageSize={pageNum}
-            // bidirectionalCachePages={1}
+            bidirectionalCachePages={1}
             total={recordCount}
             size="small"
-            dataSource={[pageIndex, recordList]}
+            dataSource={[pageIndex, dataList]}
             columns={columns}
-            scroll={{ x: 1500, y: 250 }}
+            scroll={{ x: 2500, y: 600 }}
             bordered
             pagination={{
               position: 'bottom',
@@ -430,3 +256,190 @@ class NoticeList extends Component {
 NoticeList.propTypes = {};
 
 export default NoticeList;
+
+{/* <Card className="search-card">
+  <Form onSubmit={this.handleSubmit} size="small">
+    <Row>
+      <Col span={6}>
+        <FormItem label="通告日期" {...formItemLayout}>
+          {getFieldDecorator('planDate', {
+            rules: []
+          })(
+            <DatePicker
+              format='YYYY-MM-DD'
+              style={{ width: '100%' }}
+              getCalendarContainer={trigger => trigger.parentNode}
+            />,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={6}>
+        <FormItem label="场景" {...formItemLayout}>
+          {getFieldDecorator('location', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={6}>
+        <FormItem label="实拍地" {...formItemLayout}>
+          {getFieldDecorator('projectPlace', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={6}>
+        <FormItem label="内容提示" {...formItemLayout}>
+          {getFieldDecorator('summary', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+    </Row>
+    <Row>
+      <Col span={6}>
+        <FormItem label="组" {...formItemLayout}>
+          {getFieldDecorator('unitId', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="A">A</Option>
+              <Option value="B">B</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={6}>
+        <FormItem label="角色" {...formItemLayout}>
+          {getFieldDecorator('characters1', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={6}>
+        <FormItem label="特约" {...formItemLayout}>
+          {getFieldDecorator('characters4', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={6}>
+        <FormItem label="群演" {...formItemLayout}>
+          {getFieldDecorator('characters2', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+    </Row>
+    <Row>
+      <Col span={4}>
+        <FormItem label="集" {...formItemLayout}>
+          {getFieldDecorator('episodeNum', {
+            rules: []
+          })(
+            <Input maxLength="15" placeholder="请输入" />,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={4}>
+        <FormItem label="场" {...formItemLayout}>
+          {getFieldDecorator('sceneNum', {
+            rules: []
+          })(
+            <Input maxLength="15" placeholder="请输入" />,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={4}>
+        <FormItem label="时间" {...formItemLayout}>
+          {getFieldDecorator('time', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={4}>
+        <FormItem label="空间" {...formItemLayout}>
+          {getFieldDecorator('space', {
+            rules: []
+          })(
+            <Select
+              placeholder="请选择"
+              getPopupContainer={trigger => trigger.parentNode}
+            >
+              <Option value="">请选择</Option>
+            </Select>,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={4}>
+        <FormItem label="文戏" {...formItemLayout}>
+          {getFieldDecorator('wenPage', {
+            rules: []
+          })(
+            <InputNumber min={0} max={10} step={0.1} style={{ width: '100%' }} />,
+          )}
+        </FormItem>
+      </Col>
+      <Col span={4}>
+        <FormItem label="武戏" {...formItemLayout}>
+          {getFieldDecorator('wuPage', {
+            rules: []
+          })(
+            <InputNumber min={0} max={10} step={0.1} style={{ width: '100%' }} />,
+          )}
+        </FormItem>
+      </Col>
+    </Row>
+  </Form>
+</Card> */}
