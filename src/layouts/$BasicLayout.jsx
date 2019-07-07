@@ -3,87 +3,99 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { BasicLayout as ProLayoutComponents } from '@ant-design/pro-layout';
 import { formatMessage } from 'umi-plugin-react/locale';
-import { isAntDesignPro } from '@/utils/utils';
-// import logo from '../assets/logo.svg';
+import logo from '../assets/logo.svg';
 
 
-/**
- * use Authorized check all menu item
- */
-const menuDataRender = menuList => {
-  return menuList.map(item => {
-    const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
-    return Authorized.check(item.authority, localItem, null);
-  });
-};
 
-const headerRender = (props) => {
-  const { logo } = props;
-  return (
-    <div>
-      {logo}
-    </div>
-  )
-};
+@connect(({ global, settings }) => ({ global, settings }))
+class BasicLayout extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-const BasicLayout = props => {
-  const { dispatch, children, settings, match: { params: { id } } } = props;
-  /**
-   * constructor
-   */
+  componentDidMount() {
+    const { dispatch, match: { params: { id } } } = this.props;
+    window.addEventListener('resize', this.resize);
+    dispatch({
+      type: 'settings/getSetting',
+    });
+    dispatch({
+      type: 'global/queryProjectDetail',
+      payload: {
+        projectId: id
+      }
+    })
+  }
 
-  useState(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'settings/getSetting',
-      });
-    }
-  });
-  /**
-   * init variables
-   */
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    window.removeEventListener('resize', this.resize);
+    dispatch({
+      type: 'global/save',
+      payload: {
+        queryProjectDetailData: {
+          departments: []
+        }
+      }
+    })
+  }
 
-  return (
-    <ProLayoutComponents
-      logo={null}
-      onCollapse={false}
-      collapsed={false}
-      siderWidth={200}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        return <Link to={menuItemProps.path.replace(/:id/, id)}>{defaultDom}</Link>;
-      }}
-      breadcrumbRender={(routers = []) => {
-        return [
-          {
-            path: '/',
-            breadcrumbName: formatMessage({
-              id: 'menu.home',
-              defaultMessage: 'Home',
-            }),
-          },
-          ...routers,
-        ];
-      }}
-      footerRender={false}
-      menuDataRender={menuDataRender}
-      formatMessage={formatMessage}
-      rightContentRender={rightProps => <RightContent {...rightProps} />}
-      {...props}
-      {...settings}
-    >
-      {children}
-    </ProLayoutComponents>
-  );
-};
+  resize = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'global/changeScreen'
+    })
+  }
 
-export default connect(({ global, settings }) => ({
-  collapsed: global.collapsed,
-  settings,
-}))(BasicLayout);
+  menuDataRender = (menuList, ischild) => {
+    const { global: { queryProjectDetailData: { departments } } } = this.props;
+    const departmentsName = departments.map(item => item.name);
+    return menuList.map(item => {
+      if (departmentsName.includes(item.name) || ischild) {
+        return { ...item, children: item.children ? this.menuDataRender(item.children, true) : [] }
+      }
+    });
+  };
+
+  headerRender = (props) => {
+    return (
+      <div>
+        {logo}
+      </div>
+    )
+  };
+
+
+  render() {
+    const { children, settings, match: { params: { id } } } = this.props;
+
+    return (
+      <ProLayoutComponents
+        logo={() => (<Link to="/"><img src={logo} alt="易制片" /></Link>)}
+        onCollapse={false}
+        collapsed={false}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          return <Link to={menuItemProps.path.replace(/:id/, id)}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={false}
+        footerRender={false}
+        menuDataRender={this.menuDataRender}
+        formatMessage={formatMessage}
+        rightContentRender={rightProps => <RightContent {...rightProps} />}
+        {...this.props}
+        {...settings}
+      >
+        {children}
+      </ProLayoutComponents>
+    )
+  }
+}
+
+export default BasicLayout;

@@ -1,16 +1,18 @@
 export default {
+  title: '易制片',
   navTheme: 'dark',
   primaryColor: '#1890FF',
   layout: 'sidemenu',
   contentWidth: 'Fluid',
-  fixedHeader: false,
-  autoHideHeader: false,
-  fixSiderbar: false,
+  fixedHeader: true,
+  fixSiderbar: true,
+  autoHideHeader: true,
+  siderWidth: 200,
+  collapsedButtonRender: false,
   colorWeak: false,
   menu: {
-    locale: true,
+    locale: false,
   },
-  title: '易制片',
   pwa: false,
   iconfontUrl: '',
   formItemLayout: {

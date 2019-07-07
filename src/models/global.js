@@ -1,29 +1,23 @@
-// import { queryNotices } from '@/services/login';
+import { queryProjectDetail } from '@/services/global';
 
 const GlobalModel = {
   namespace: 'global',
   state: {
     collapsed: false,
+    pageHeight: window.document.documentElement.clientHeight,
+    pageWidth: window.document.documentElement.clientWidth,
     notices: [],
+    queryProjectDetailData: {
+      departments: []
+    },
   },
   effects: {
-    // *fetchNotices(_, { call, put, select }) {
-    //   const data = yield call(queryNotices);
-    //   yield put({
-    //     type: 'saveNotices',
-    //     payload: data,
-    //   });
-    //   const unreadCount = yield select(
-    //     state => state.global.notices.filter(item => !item.read).length,
-    //   );
-    //   yield put({
-    //     type: 'user/changeNotifyCount',
-    //     payload: {
-    //       totalCount: data.length,
-    //       unreadCount,
-    //     },
-    //   });
-    // },
+    *queryProjectDetail({ payload, callback }, { call, put }) {
+      const { data } = yield call(queryProjectDetail, payload);
+      if (data && data.code === 0) {
+        yield put({ type: 'save', payload: { queryProjectDetailData: data.data } });
+      }
+    },
 
     *clearNotices({ payload }, { put, select }) {
       yield put({
@@ -69,6 +63,14 @@ const GlobalModel = {
     },
   },
   reducers: {
+    save(state, { payload }) {
+      return { ...state, ...payload };
+    },
+    changeScreen(state) {
+      const pageHeight = window.document.documentElement.clientHeight;
+      const pageWidth = window.document.documentElement.clientWidth;
+      return { ...state, pageHeight, pageWidth }
+    },
     changeLayoutCollapsed(
       state = {
         notices: [],

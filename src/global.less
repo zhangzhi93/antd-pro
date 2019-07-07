@@ -1,4 +1,4 @@
-@import '~antd-table-infinity/dist/index.css';
+// @import '~antd-table-infinity/dist/index.css';
 @import '~antd/es/style/themes/default.less';
 @blue: #008cff;
 
@@ -8,6 +8,20 @@ body,
   height: 100%;
   background-color: #f0f2f5;
 }
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
 
 #refLoadingPlaceholder {
   display: none !important;
@@ -15,7 +29,7 @@ body,
 
 ::-webkit-scrollbar {
   width: 4px;
-  height: 6px;
+  height: 8px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: @blue;
@@ -40,20 +54,44 @@ body,
   width: 320px;
 }
 .text-nowrap-200 {
-  width: 150px;
+  width: 165px;
 }
-.text-nowrap-150{
+.text-nowrap-150 {
   width: 125px;
 }
-.text-nowrap-100{
+.text-nowrap-100 {
   width: 80px;
 }
 .ant-layout {
   min-height: 100vh;
 }
-
+.table-components {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .ant-pagination {
+    text-align: right;
+    margin-top: 10px;
+  }
+}
 .table-container {
-  margin-top: 2px;
+  overflow: auto;
+  .ant-table-content>.ant-table-body {
+    margin-left: 0 !important;
+  }
+  .ant-table-bordered {
+    border: none;
+    .ant-table-content {
+      border-right: none !important;
+      table {
+        border: 1px solid #e8e8e8!important;
+      }
+    }
+  }
+  td,
+  th {
+    white-space: nowrap;
+  }
 }
 .ant-table-thead>tr>th {
   color: rgba(0, 0, 0, 0.85);
@@ -61,6 +99,10 @@ body,
   text-align: left;
   background-color: #fafafa !important;
   transition: background .3s ease;
+}
+.ant-pro-basicLayout-content>.ant-layout {
+  background-color: #fff;
+  padding: 20px;
 }
 .ant-card.search-card {
   .ant-card-body {
@@ -81,20 +123,7 @@ body,
   }
 }
 
-canvas {
-  display: block;
-}
 
-body {
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-ul,
-ol {
-  list-style: none;
-}
 
 @media (max-width: @screen-xs) {
   .ant-table {

@@ -101,7 +101,8 @@ export default {
     component: '../layouts/LoginLayout',
   }, {
     path: '/project/:id',
-    hideInMenu:true,
+    hideInMenu: true,
+    // Routes: ['src/pages/Authorized'],
     component: '../layouts/$BasicLayout',
     routes: [
       { path: '/project/:id', redirect: '/project/:id/dit/notice' },
@@ -119,6 +120,11 @@ export default {
             name: '镜次表',
             component: './DIT/Shot/index',
           },
+          {
+            path: '/project/:id/dit/xml',
+            name: 'XML匹配',
+            component: './DIT/Shot/index',
+          },
         ],
       },
       {
@@ -130,27 +136,50 @@ export default {
             name: '场次',
             component: './Overall/List/index',
           },
+          {
+            path: '/project/:id/overall/character',
+            name: '角色',
+            component: './Overall/List/index',
+          },
+          {
+            path: '/project/:id/overall/location',
+            name: '场景',
+            component: './Overall/List/index',
+          },
+        ],
+      },
+      {
+        path: '/project/:id/actor-overall',
+        name: '演员统筹',
+        routes: [
+          {
+            path: '/project/:id/actor-overall/list',
+            name: '场次',
+            component: './Overall/List/index',
+          },
+          {
+            path: '/project/:id/actor-overall/character',
+            name: '角色',
+            component: './Overall/List/index',
+          },
+          {
+            path: '/project/:id/actor-overall/location',
+            name: '场景',
+            component: './Overall/List/index',
+          },
         ],
       },
     ],
   }, {
     path: '/',
     component: '../layouts/UserLayout',
-    Routes: ['src/pages/Authorized'],
-    authority: ['admin', 'user'],
     routes: [
       {
         path: '/',
         name: 'dashboard',
         icon: 'smile',
         component: './Dashboard/index',
-      }, {
-        path: '/console',
-        name: 'console',
-        icon: 'smile',
-        component: './Console',
-      },
-    ],
+      },],
   },],
   proxy: {
     "/api": {

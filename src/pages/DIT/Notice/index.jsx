@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
-import { Layout, Button, Tag, Badge, Card, Form, Row, Col, Input, DatePicker, message, Modal, Select, InputNumber } from 'antd';
-import PageTable from '@/components/PageTable';
+import { Layout, Button, Table, Pagination, Tag, Badge, Card, Form, Row, Col, Input, DatePicker, message, Modal, Select, InputNumber } from 'antd';
 import config from '../../../../config/defaultSettings';
 
 const { confirm } = Modal;
@@ -10,67 +9,50 @@ const { Option } = Select;
 const FormItem = Form.Item;
 const { formItemLayout } = config;
 
-@connect(({ notice, loading }) => ({ notice, loading }))
+@connect(({ global, notice, loading }) => ({ global, notice, loading }))
 @Form.create()
 class NoticeList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: false,
-      pageIndex: 1,
-      pageNum: 30,
-      dataList: [],
+      pagination: {
+        page: 1,
+        pageSize: 30,
+      },
     };
   }
 
-  handleTableChange = (pagination) => {
-    const { pageSize, current } = pagination;
-    const { dispatch } = this.props;
-    const { payload } = this.state;
+  componentDidMount() {
+    const { dispatch, match: { params: { id } } } = this.props;
+    const { pagination } = this.state;
+    dispatch({
+      type: 'notice/getDitNotifyQueryAll',
+      payload: {
+        projectId: id,
+        pageIndex: pagination.page - 1,
+        pageNum: pagination.pageSize
+      }
+    })
+  }
+
+  handleTableChange = (current, pageSize) => {
+    const { dispatch, match: { params: { id } } } = this.props;
+    // const { payload } = this.state;
     this.setState({
       pagination: {
         page: current,
         pageSize,
       },
     });
-    const query = {
-      ...payload,
-      page: current,
-      rows: pageSize,
-    };
-    dispatch({
-      type: 'memeberTag/getMemberTagList',
-      payload: query,
-    });
-  }
-
-
-  handleFetch = ({ page, pageSize }) => {
-    const { dispatch, match: { params: { id } } } = this.props;
-    const currentPage = page - 1;
-
-    this.setState({ loading: true });
-
     dispatch({
       type: 'notice/getDitNotifyQueryAll',
       payload: {
         projectId: id,
-        pageIndex: currentPage,
-        pageNum: pageSize
+        pageIndex: current - 1,
+        pageNum: pageSize,
       },
-      callback: res => {
-        if (res.code === 0) {
-          this.setState({
-            loading: false,
-            pageIndex: page,
-            dataList: res.data.recordList,
-          });
-        } else {
-          message.error(res.msg);
-        }
-      }
-    })
-  };
+    });
+  }
 
   clickRow = (record, index) => {
     // message.success(`点击行数据：${JSON.stringify(record)},点击行索引：${index}`);
@@ -109,16 +91,15 @@ class NoticeList extends Component {
   }
 
   render() {
-    const { form, notice: { getDitNotifyQueryAllData: { recordList, recordCount } } } = this.props;
-    const { loading, pageIndex, pageNum, dataList } = this.state;
-    const { getFieldDecorator } = form;
+    const { form, loading: { effects }, global: { pageHeight, pageWidth }, notice: { getDitNotifyQueryAllData: { recordList, recordCount } } } = this.props;
+    const { pagination } = this.state;
+    // const { getFieldDecorator } = form;
+    const loading = effects['notice/getDitNotifyQueryAll'];
 
     const columns = [{
       title: '组',
       dataIndex: 'unitName',
       key: 'unitName',
-      width: 50,
-      fixed: 'left',
       onCell: (record, rowIndex) => {
         return {
           onClick: () => { this.clickCell(record, rowIndex, 1) }
@@ -136,12 +117,10 @@ class NoticeList extends Component {
           onClick: () => { this.clickCell(record, rowIndex, 2) }
         };
       },
-      width: 100,
     }, {
       title: '通告日期',
       dataIndex: 'planTime',
       key: 'planTime',
-      width: 100,
       onCell: (record, rowIndex) => {
         return {
           onClick: () => { this.clickCell(record, rowIndex, 3) }
@@ -151,7 +130,6 @@ class NoticeList extends Component {
       title: '集',
       dataIndex: 'episodeNum',
       key: 'episodeNum',
-      width: 100,
       onCell: (record, rowIndex) => {
         return {
           onClick: () => { this.clickCell(record, rowIndex, 4) }
@@ -161,7 +139,6 @@ class NoticeList extends Component {
       title: '场',
       dataIndex: 'sceneNum',
       key: 'sceneNum',
-      width: 100,
       render: (text, record) => (
         <p className="text-nowrap-100">{text}</p>
       ),
@@ -169,17 +146,14 @@ class NoticeList extends Component {
       title: '时间',
       dataIndex: 'time',
       key: 'time',
-      width: 50,
     }, {
       title: '空间',
       dataIndex: 'space',
       key: 'space',
-      width: 50,
     }, {
       title: '实拍地',
       dataIndex: 'projectPlace',
       key: 'projectPlace',
-      width: 150,
       render: (text, record) => (
         <p className="text-nowrap-150">{text}</p>
       ),
@@ -187,7 +161,6 @@ class NoticeList extends Component {
       title: '场景',
       dataIndex: 'location',
       key: 'location',
-      width: 150,
       render: (text, record) => (
         <p className="text-nowrap-150">{text}</p>
       ),
@@ -195,20 +168,14 @@ class NoticeList extends Component {
       title: '文戏',
       dataIndex: 'wenPage',
       key: 'wenPage',
-      width: 50,
     }, {
       title: '武戏',
       dataIndex: 'wuPage',
       key: 'wuPage',
-      width: 50,
     }, {
       title: '内容提示',
       dataIndex: 'summary',
       key: 'summary',
-      width: 100,
-      // render: (text, record) => (
-      //   <p className="text-nowrap-200">{text}</p>
-      // ),
     }, {
       title: '主演',
       dataIndex: 'charact1',
@@ -221,31 +188,31 @@ class NoticeList extends Component {
         </div>
       ),
     }];
+
     return (
-      <Layout>
-        <div className="table-container">
-          <PageTable
-            key="key"
-            onRow={(record, index) => {
-              return {
-                onClick: () => { this.clickRow(record, index) }
-              };
-            }}
-            loading={loading}
-            onFetch={this.handleFetch}
-            pageSize={pageNum}
-            bidirectionalCachePages={1}
-            total={recordCount}
+      <Layout style={{ height: pageHeight - 112 }}>
+        <div className="table-components">
+          <div className="table-container">
+            <Table
+              loading={loading}
+              rowKey="id"
+              size="small"
+              bordered
+              columns={columns}
+              dataSource={recordList}
+              // scroll={{ x: 2250, y: 300 }}
+              pagination={false}
+            />
+          </div>
+          <Pagination
+            {...pagination}
             size="small"
-            dataSource={[pageIndex, dataList]}
-            columns={columns}
-            scroll={{ x: 2500, y: 600 }}
-            bordered
-            pagination={{
-              position: 'bottom',
-              size: 'small',
-              className: 'custom-classname-pagination',
-            }}
+            total={recordCount}
+            current={pagination.page}
+            showSizeChanger
+            showQuickJumper
+            showTotal={(total) => (<div>共<span>{total}</span>条数据</div>)}
+            onChange={this.handleTableChange}
           />
         </div>
       </Layout>

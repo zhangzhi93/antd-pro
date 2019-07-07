@@ -9,7 +9,7 @@ const instance = axios.create({
     'token': window.localStorage.getItem('token')
   },
   // 超时为5s 上线后是3s
-  timeout: 5000,
+  timeout: 50000,
   paramsSerializer: (params) => {
     return Qs.stringify(params, { arrayFormat: 'brackets' });
   },

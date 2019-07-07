@@ -36,7 +36,7 @@ class ProjectCard extends Component {
           <div>
             {
               projectInfo.memberList.map(item => (
-                <Avatar src={item.avatarUrl} />
+                <Avatar src={item.avatarUrl} key={item.userId} />
               ))
             }
           </div>

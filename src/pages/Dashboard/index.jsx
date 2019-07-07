@@ -55,12 +55,12 @@ class DashboardContent extends Component {
           <Button type="link" onClick={() => this.setState({ visible: true })}>新建项目</Button>
         </div>
         {
-          renderList.map(col => (
-            <Row gutter={16} className={styles.rowCard}>
+          renderList.map((col,index) => (
+            <Row gutter={16} className={styles.rowCard} key={`${col.length}-${index}`}>
               {
                 col.map(item => (
-                  <Col span={6}>
-                    <Card projectInfo={item} to={item.projectId} key={item.projectId} />
+                  <Col span={6} key={item.projectId}>
+                    <Card projectInfo={item} to={item.projectId} />
                   </Col>
                 ))
               }
@@ -81,7 +81,7 @@ class DashboardContent extends Component {
               })(
                 <Select placeholder='请输入项目类型' style={{ width: '80%' }}>
                   {projectTypesData.map(item => {
-                    return <Option value={item.type_id}>{item.type_name}</Option>
+                    return <Option value={item.type_id} key={item.type_id}>{item.type_name}</Option>
                   })}
                 </Select>
               )}

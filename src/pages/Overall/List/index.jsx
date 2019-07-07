@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import Link from 'umi/link';
-import { Layout, message, Tag } from 'antd';
-import {PageTable} from 'antd-table-infinity';
-// import PageTable from '@/components/PageTable';
+import { Layout, message, Tag, Alert } from 'antd';
+import InfinityTable from '@/components/InfinityTable';
 
 const extendColumnParams = {
   projectId: {
@@ -60,7 +59,7 @@ const extendColumnParams = {
     width: 100,
   },
   weather: {
-
+    width: 100,
   },
   status: {
     width: 100,
@@ -105,7 +104,7 @@ const extendColumnParams = {
   },
 }
 
-@connect(({ session, loading }) => ({ session, loading }))
+@connect(({ global, session, loading }) => ({ global, session, loading }))
 class SessionList extends Component {
   constructor(props) {
     super(props);
@@ -183,8 +182,7 @@ class SessionList extends Component {
   };
 
   render() {
-    const { session: { getQueryTableHeadData, getQueryTableData: { recordList, totalCount } } } = this.props;
-    console.log(this.props);
+    const { global: { pageHeight, pageWidth }, session: { getQueryTableHeadData, getQueryTableData: { recordList, totalCount } } } = this.props;
     const { loading, pageIndex, pageNum, dataList } = this.state;
     const TableData = this.renderColumns(getQueryTableHeadData);
 
@@ -192,12 +190,8 @@ class SessionList extends Component {
       <Layout>
         {
           TableData.length > 0 ?
-            <PageTable
-              pagination={{
-                position: 'bottom',
-                size: 'small',
-                className: 'custom-classname-pagination',
-              }}
+            <InfinityTable
+              pagination={false}
               loading={loading}
               onFetch={this.handleFetch}
               pageSize={pageNum}
@@ -206,10 +200,11 @@ class SessionList extends Component {
               size="small"
               dataSource={[pageIndex, dataList]}
               columns={TableData}
-              scroll={{ x: 5000, y: 600 }}
+              scroll={{ x: 5000, y: pageHeight - 285 }}
               bordered
             /> : null
         }
+        <Alert message={`总共 ${totalCount}条记录 总计${totalCount / pageNum} 页`} type="info" showIcon style={{ marginTop: 10 }} />
       </Layout>
     );
   }

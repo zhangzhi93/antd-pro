@@ -1,6 +1,5 @@
 import React from 'react';
 import Authorized from '@/utils/Authorized';
-import { connect } from 'dva';
 import pathToRegexp from 'path-to-regexp';
 
 const getRouteAuthority = (path, routeData) => {
