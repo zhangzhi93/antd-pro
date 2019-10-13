@@ -127,15 +127,12 @@ class ShotList extends Component {
       title: '概述',
       dataIndex: 'note0',
       key: 'note0',
-      render: (text, record) => (
-        <p className="text-nowrap-200">{text}</p>
-      ),
     }, {
       title: '角色',
       dataIndex: 'characterList',
       key: 'characterList',
       render: (text, record) => (
-        <div>{text && text.map(item => (<Tag>{item.fullName}</Tag>))}</div>
+        <div className="nowrap">{text && text.map(item => (<Tag>{item.fullName}</Tag>))}</div>
       ),
     }, {
       title: '景别',
@@ -149,9 +146,6 @@ class ShotList extends Component {
       title: '备注',
       dataIndex: 'note',
       key: 'note',
-      render: (text, record) => (
-        <p className="text-nowrap-150">{text}</p>
-      ),
     }, {
       title: '提交时间',
       dataIndex: 'createDate',

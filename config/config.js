@@ -181,25 +181,18 @@ export default {
         component: './Dashboard/index',
       },],
   },],
-  proxy: {
-    "/api": {
-      "target": "http://www.easyaction.cn",
-      "changeOrigin": true,
-      "pathRewrite": { "^/api": "" }
-    }
-  },
+  // proxy: {
+  //   "/api": {
+  //     "target": "http://www.easyaction.cn",
+  //     "changeOrigin": true,
+  //     "pathRewrite": { "^/api": "" }
+  //   }
+  // },
   // Theme for antd
   // https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': primaryColor,
   },
-  // proxy: {
-  //   '/server/api/': {
-  //     target: 'https://preview.pro.ant.design/',
-  //     changeOrigin: true,
-  //     pathRewrite: { '^/server': '' },
-  //   },
-  // },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,

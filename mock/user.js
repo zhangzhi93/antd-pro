@@ -72,31 +72,23 @@ export default {
       address: 'Sidney No. 1 Lake Park',
     },
   ],
-  'POST /api/login/account': (req, res) => {
-    const { password, userName, type } = req.body;
+  'POST /api/web/easyaction/user/userLogin': (req, res) => {
+    const { password, loginName, appId } = req.body;
+    console.log(req.body);
 
-    if (password === 'ant.design' && userName === 'admin') {
+    if (password === '123456' && loginName === 'zhangsan') {
       res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
-      });
-      return;
-    }
-
-    if (password === 'ant.design' && userName === 'user') {
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'user',
+        msg: 'succeed',
+        data: { "isComplete": "YES", "token": "16d349a7a205476ca264b396387083dc" },
+        code: 0,
       });
       return;
     }
 
     res.send({
-      status: 'error',
-      type,
-      currentAuthority: 'guest',
+      msg: '用户或密码错误',
+      data: null,
+      code: 7,
     });
   },
   'POST /api/register': (req, res) => {

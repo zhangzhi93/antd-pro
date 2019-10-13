@@ -41,6 +41,7 @@ module.exports = {
     'linebreak-style': 0,
     'no-useless-constructor': 0,
     'no-lone-blocks': 0,
+    'react/jsx-props-no-spreading': 0,
   },
   settings: {
     // support import modules from TypeScript files in JavaScript files
