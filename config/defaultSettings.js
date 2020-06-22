@@ -1,22 +1,16 @@
 export default {
-  title: '易制片',
   navTheme: 'dark',
   primaryColor: '#1890FF',
   layout: 'sidemenu',
   contentWidth: 'Fluid',
-  fixedHeader: true,
-  fixSiderbar: true,
-  autoHideHeader: true,
-  siderWidth: 200,
-  collapsedButtonRender: false,
+  fixedHeader: true, // 原为false
+  autoHideHeader: false,
+  fixSiderbar: true, // 原为false
   colorWeak: false,
   menu: {
     locale: false,
   },
+  title: 'EasyAction',
   pwa: false,
-  iconfontUrl: '',
-  formItemLayout: {
-    labelCol: { span: 6 },
-    wrapperCol: { span: 18 },
-  }
+  collapse: true,
 };

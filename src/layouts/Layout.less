@@ -4,11 +4,16 @@
   background-position: center 2.2rem;
   background-size: 100%;
   text-align: center;
+  :global {
+    .ant-tabs-nav-list {
+      margin: 0 auto;
+    }
+  }
 }
 .loginForm {
   max-width: 400px;
-  margin: 0 auto;
-  margin-top: 20px;
+  margin: 0 auto !important;
+  margin-top: 20px !important;
   padding: 0 20px;
   text-align: left;
 }
@@ -17,6 +22,84 @@
 }
 .content {
   padding: 10px 20px;
-  height: calc(~"100vh - 64px");
+  height: calc(~'100vh - 64px');
   overflow-y: auto;
+}
+.listContent {
+  padding: 10px 20px;
+  height: calc(~'100vh - 64px');
+  overflow-y: auto;
+  margin-top: 64px;
+}
+.qrcode {
+  text-align: center;
+  width: 280px;
+  margin: 15px auto;
+  img {
+    width: 100%;
+  }
+  :global {
+    .success {
+      img {
+        width: 80px;
+        height: 80px;
+      }
+    }
+  }
+}
+:global {
+  .home-header {
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+  }
+}
+.logo {
+  float: left;
+  position: relative;
+  padding: 0 24px;
+  overflow: hidden;
+  background: #001529;
+  transition: all 0.3s;
+  cursor: pointer;
+  img {
+    display: inline-block;
+    height: 32px;
+    vertical-align: middle;
+  }
+}
+.loginLogo {
+  :global {
+    .logo-desc {
+      margin-top: 10px;
+      color: #87898b;
+    }
+    .logo-image {
+      width: 180px;
+      display: inline-block;
+      position: relative;
+      img {
+        width: 100%;
+      }
+      .logo-beta {
+        position: absolute;
+        top: -32px;
+        right: -48px;
+      }
+    }
+  }
+}
+.footer {
+  position: fixed;
+  bottom: 10px;
+  width: 100%;
+  color: #87888a;
+  p {
+    margin: 0;
+  }
+  p:last-child {
+    font-size: 10px;
+  }
 }

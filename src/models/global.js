@@ -1,23 +1,10 @@
-import { queryProjectDetail } from '@/services/global';
-
 const GlobalModel = {
   namespace: 'global',
   state: {
     collapsed: false,
-    pageHeight: window.document.documentElement.clientHeight,
-    pageWidth: window.document.documentElement.clientWidth,
     notices: [],
-    queryProjectDetailData: {
-      departments: []
-    },
   },
   effects: {
-    *queryProjectDetail({ payload, callback }, { call, put }) {
-      const { data } = yield call(queryProjectDetail, payload);
-      if (data && data.code === 0) {
-        yield put({ type: 'save', payload: { queryProjectDetailData: data.data } });
-      }
-    },
 
     *clearNotices({ payload }, { put, select }) {
       yield put({
@@ -63,14 +50,6 @@ const GlobalModel = {
     },
   },
   reducers: {
-    save(state, { payload }) {
-      return { ...state, ...payload };
-    },
-    changeScreen(state) {
-      const pageHeight = window.document.documentElement.clientHeight;
-      const pageWidth = window.document.documentElement.clientWidth;
-      return { ...state, pageHeight, pageWidth }
-    },
     changeLayoutCollapsed(
       state = {
         notices: [],
@@ -106,7 +85,7 @@ const GlobalModel = {
   subscriptions: {
     setup({ history }) {
       // Subscribe history(url) change, trigger `load` action if pathname is `/`
-      return history.listen(({ pathname, search }) => {
+      history.listen(({ pathname, search }) => {
         if (typeof window.ga !== 'undefined') {
           window.ga('send', 'pageview', pathname + search);
         }

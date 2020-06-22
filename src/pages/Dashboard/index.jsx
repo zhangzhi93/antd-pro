@@ -12,7 +12,6 @@ const { TextArea } = Input;
 const { formItemLayout } = config;
 
 @connect(({ dashboard }) => ({ dashboard }))
-@Form.create()
 class DashboardContent extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +20,7 @@ class DashboardContent extends Component {
     };
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const { dispatch } = this.props;
     dispatch({
       type: 'dashboard/getCurrentProjects',
@@ -42,10 +41,9 @@ class DashboardContent extends Component {
     return res;
   }
 
-  render() {
+  render () {
     const { visible } = this.state;
-    const { dashboard: { projectListData, projectTypesData }, loading, form } = this.props;
-    const { getFieldDecorator } = form;
+    const { dashboard: { projectListData, projectTypesData }, loading } = this.props;
     const renderList = this.renderRow(projectListData, 4);
 
     return (
@@ -55,7 +53,7 @@ class DashboardContent extends Component {
           <Button type="link" onClick={() => this.setState({ visible: true })}>新建项目</Button>
         </div>
         {
-          renderList.map((col,index) => (
+          renderList.map((col, index) => (
             <Row gutter={16} className={styles.rowCard} key={`${col.length}-${index}`}>
               {
                 col.map(item => (
@@ -75,34 +73,33 @@ class DashboardContent extends Component {
           onCancel={() => this.setState({ visible: false })}
         >
           <Form>
-            <FormItem label="项目类型" {...formItemLayout}>
-              {getFieldDecorator('projectType', {
-                rules: [{ type: 'number', required: true, message: '项目类型不能为空' }]
-              })(
-                <Select placeholder='请输入项目类型' style={{ width: '80%' }}>
-                  {projectTypesData.map(item => {
-                    return <Option value={item.type_id} key={item.type_id}>{item.type_name}</Option>
-                  })}
-                </Select>
-              )}
+            <FormItem
+              label="项目类型"
+              name="projectType"
+              rules={[{ type: 'number', required: true, message: '项目类型不能为空' }]}
+              {...formItemLayout}
+            >
+              <Select placeholder='请输入项目类型' style={{ width: '80%' }}>
+                {projectTypesData.map(item => {
+                  return <Option value={item.type_id} key={item.type_id}>{item.type_name}</Option>
+                })}
+              </Select>
             </FormItem>
-            <FormItem {...formItemLayout} label='项目名称'>
-              {getFieldDecorator('name', {
-                rules: [{ type: 'string', required: true, message: '项目名称不能为空' }],
-                validateFirst: true,
-                validateTrigger: 'onChange'
-              })(
-                <Input placeholder='请输入项目名称' style={{ width: '80%' }} />
-              )}
+            <FormItem
+              label="项目名称"
+              name="name"
+              rules={[{ type: 'string', required: true, message: '项目名称不能为空' }]}
+              {...formItemLayout}
+            >
+              <Input placeholder='请输入项目名称' style={{ width: '80%' }} />
             </FormItem>
-            <FormItem {...formItemLayout} label='项目概述'>
-              {getFieldDecorator('remark', {
-                rules: [{ type: 'string', required: true, message: '项目描述不能为空' }],
-                validateFirst: true,
-                validateTrigger: 'onChange'
-              })(
-                <TextArea placeholder='请输入项目概述' style={{ width: '80%' }} />
-              )}
+            <FormItem
+              label="项目概述"
+              name="remark"
+              rules={[{ type: 'string', required: true, message: '项目描述不能为空' }]}
+              {...formItemLayout}
+            >
+              <TextArea placeholder='请输入项目概述' style={{ width: '80%' }} />
             </FormItem>
           </Form>
         </Modal>

@@ -1,0 +1,110 @@
+.wrapper {
+  display: flex;
+
+  .left,
+  .middle,
+  .right {
+    height: calc(100vh - 201px);
+  }
+
+  :global {
+    .ant-card {
+      height: 100%;
+    }
+
+    .ant-card-body {
+      height: 100%;
+    }
+  }
+}
+
+.left {
+  width: 200px;
+  flex-shrink: 0;
+
+  :global {
+    .ant-card-head {
+      padding: 10px 15px;
+    }
+
+    .ant-card-head-title {
+      padding: 0;
+    }
+
+    .ant-select {
+      width: 100%;
+    }
+
+    .ant-card-body {
+      height: calc(100% - 53px);
+      padding: 10px 15px;
+      overflow-y: auto;
+    }
+
+    .ant-list-item {
+      padding: 5px;
+
+      &:hover {
+        background-color: #F7F8FA;
+      }
+    }
+  }
+}
+
+.center {
+  flex: 1;
+  min-width: 400px;
+  padding: 0 24px;
+}
+
+.active {
+  border-left: 2px solid orange;
+  background-color: #F2F3F7;
+
+  &:hover {
+    background-color: #F2F3F7 !important;
+  }
+}
+
+.right {
+  width: 400px;
+  flex-shrink: 0;
+
+  :global {
+    .ant-card-body {
+      padding: 24px;
+      overflow-y: auto;
+    }
+  }
+}
+
+.form {
+  .formCol {
+    margin-bottom: 12px;
+  }
+
+  :global {
+
+    .ant-form-item {
+      width: 100%;
+      margin-right: 0;
+      display: flex;
+
+      .ant-form-item-label {
+        width: 80px;
+      }
+
+      .ant-form-item-control-wrapper {
+        flex: 1;
+      }
+
+      .ant-select-selection--multiple {
+        min-height: 64px;
+      }
+    }
+
+    .ant-input-number {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,156 @@
+.create {
+  margin-top: 24px;
+  padding: 24px;
+  background: #fff;
+
+  :global {
+    .ant-form-item-control {
+      text-align: left;
+    }
+    .ant-picker {
+      width: 100%;
+    }
+    .steps {
+      margin: 10px auto 50px;
+      max-width: 700px;
+    }
+
+    .body.show {
+      display: block;
+    }
+
+    .body.step-1 {
+      .layout {
+        max-width: 600px;
+      }
+    }
+
+    .dash-border {
+      border-bottom: 1px dashed #ddd;
+      margin-bottom: 20px;
+    }
+
+    .body {
+      display: none;
+      margin-bottom: 20px;
+      text-align: center;
+
+      .layout {
+        max-width: 900px;
+        margin: 0 auto;
+
+        .form {
+          vertical-align: top;
+          display: inline-block;
+          width: 100%;
+          max-width: 500px;
+        }
+      }
+
+      .upload {
+        display: inline-block;
+        max-width: 300px;
+        width: 100%;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+
+        .ant-upload-drag-container {
+          position: relative;
+          top: -16px;
+          height: 198px;
+        }
+        .ant-upload {
+          height: 200px;
+
+          .empty {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            color: #999;
+          }
+
+          .error {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            color: red;
+          }
+        }
+      }
+
+      .info {
+        .icon {
+          text-align: center;
+          padding-top: 10px;
+          margin-bottom: 25px;
+
+          i {
+            font-size: 70px;
+            margin-bottom: 25px;
+            color: #58C427;
+          }
+
+          .text {
+            font-size: 24px;
+            color: #101010;
+          }
+        }
+
+        .detail {
+          max-width: 670px;
+          padding: 15px;
+          margin: 0 auto;
+          background: #FAFAFA;
+          margin-bottom: 25px;
+
+          .desc {
+            text-align: left;
+            display: inline-block;
+            vertical-align: top;
+            padding-left: 30px;
+            padding-top: 15px;
+            width: 100%;
+            max-width: 340px;
+
+            .t {
+              margin-bottom: 20px;
+
+              span {
+                font-size: 18px;
+              }
+            }
+
+            .text {
+              margin-bottom: 10px;
+
+              span {
+                margin: 0 5px;
+                font-size: 12px;
+              }
+            }
+          }
+        }
+      }
+
+      .btns {
+        text-align: center;
+        margin-top: 40px;
+
+        button {
+          margin: 0 20px;
+        }
+      }
+    }
+  }
+}
+.rangePicker {
+  position: relative;
+  .days {
+    position: absolute;
+    right: -55px;
+    top: 5px;
+  }
+}

@@ -1,0 +1,147 @@
+.zoom {
+  display: inline-block;
+  line-height: 32px;
+  padding-left: 16px;
+  .fullBtn {
+    font-size: 16px;
+    margin-right: 16px;
+    cursor: pointer;
+  }
+}
+.filterBtn {
+  font-size: 16px;
+  cursor: pointer;
+  .filtered {
+    color: #2B8DFC;
+  }
+}
+.actions {
+  position: relative;
+  display: inline-block;
+  padding: 0 16px;
+  &::after {
+    content: '';
+    position: absolute;
+    display: block;
+    width: 1px;
+    height: 26px;
+    top: 50%;
+    margin-top: -13px;
+    right: 0;
+    background: #eee;
+  }
+}
+.full-screen {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 10;
+}
+.sliderAction {
+  display: inline-block;
+  :global {
+    .anticon {
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .anticon-zoom-out {
+      margin-right: 16px;
+    }
+    .anticon-zoom-in {
+      margin-left: 16px;
+    }
+    .ant-slider {
+      display: inline-block;
+      width: 80px;
+      vertical-align: top;
+    }
+  }
+}
+:global {
+  .ea-card {
+    overflow: hidden;
+  }
+  .scale-1 {
+    .real {
+      table {
+        transform: scale(0.1);
+      }
+    }
+  }
+
+  .scale-2 {
+    .real {
+      table {
+        transform: scale(0.2);
+      }
+    }
+  }
+
+  .scale-3 {
+    .real {
+      table {
+        transform: scale(0.3);
+      }
+    }
+  }
+
+  .scale-4 {
+    .real {
+      table {
+        transform: scale(0.4);
+      }
+    }
+  }
+
+  .scale-5 {
+    .real {
+      table {
+        transform: scale(0.5);
+      }
+    }
+  }
+
+  .scale-6 {
+    .real {
+      table {
+        transform: scale(0.6);
+      }
+    }
+  }
+
+  .scale-7 {
+    .real {
+      table {
+        transform: scale(0.7);
+      }
+    }
+  }
+
+  .scale-8 {
+    .real {
+      table {
+        transform: scale(0.8);
+      }
+    }
+  }
+
+  .scale-9 {
+    .real {
+      table {
+        transform: scale(0.9);
+      }
+    }
+  }
+
+  .scale-10 {
+    .real {
+      table {
+        transform: scale(1);
+      }
+    }
+  }
+}

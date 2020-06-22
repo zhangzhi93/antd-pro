@@ -3,97 +3,137 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
+import ProLayout, { PageHeaderWrapper } from '@ant-design/pro-layout';
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import Link from 'umi/link';
+import { Link, connect } from 'umi';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { BasicLayout as ProLayoutComponents } from '@ant-design/pro-layout';
-import { formatMessage } from 'umi-plugin-react/locale';
-import logo from '../assets/logo.svg';
+import movie from '../assets/movie.svg';
+
+/**
+ * use Authorized check all menu item
+ */
+const menuDataRender = menuList =>
+  menuList.map(item => {
+    const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
+    return Authorized.check(item.authority, localItem, null);
+  });
 
 
-
-@connect(({ global, settings }) => ({ global, settings }))
+@connect(({ global, settings, base, project, user }) => ({
+  collapsed: global.collapsed,
+  settings,
+  base,
+  project,
+  currentUser: user.currentUser,
+}))
 class BasicLayout extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loading: false,
+    };
   }
 
   componentDidMount() {
-    const { dispatch, match: { params: { id } } } = this.props;
-    window.addEventListener('resize', this.resize);
+    const {
+      dispatch,
+      match: {
+        params: { id },
+      },
+      currentUser,
+    } = this.props;
     dispatch({
-      type: 'settings/getSetting',
-    });
-    dispatch({
-      type: 'global/queryProjectDetail',
+      type: 'base/getMenu',
       payload: {
-        projectId: id
-      }
-    })
+        projectId: id,
+      },
+    });
+    // this.setState({ loading: true });
+    // dispatch({
+    //   type: 'project/getProjectDetail',
+    //   payload: { projectId: id },
+    //   success: () => {
+    //     this.setState({ loading: false });
+    //   },
+    //   fail: () => {
+    //     this.setState({ loading: false });
+    //   }
+    // });
+    // dispatch({
+    //   type: 'project/getProjectsAllTypes',
+    // });
+    // !currentUser.nickName && dispatch({
+    //   type: 'user/getInfo',
+    // });
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
-    window.removeEventListener('resize', this.resize);
     dispatch({
-      type: 'global/save',
-      payload: {
-        queryProjectDetailData: {
-          departments: []
-        }
-      }
-    })
+      type: 'base/resetMenu',
+    });
   }
 
-  resize = () => {
+  handleMenuCollapse = payload => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'global/changeScreen'
-    })
+      type: 'global/changeLayoutCollapsed',
+      payload,
+    });
   }
 
-  menuDataRender = (menuList, ischild) => {
-    const { global: { queryProjectDetailData: { departments } } } = this.props;
-    const departmentsName = departments.map(item => item.name);
-    return menuList.map(item => {
-      if (departmentsName.includes(item.name) || ischild) {
-        return { ...item, children: item.children ? this.menuDataRender(item.children, true) : [] }
-      }
-    });
-  };
-
-  headerRender = (props) => {
-    return (
-      <div>
-        {logo}
-      </div>
-    )
-  };
-
-
   render() {
-    const { children, settings, match: { params: { id } } } = this.props;
+    const {
+      children,
+      settings,
+      match: {
+        params: { id },
+      },
+      route,
+      base,
+      collapsed,
+    } = this.props;
+    const { menuData } = base;
+    const _setting = route.settings ? Object.assign({}, settings, route.settings) : settings;
+    const { loading } = this.state;
 
     return (
-      <ProLayoutComponents
-        logo={() => (<Link to="/"><img src={logo} alt="易制片" /></Link>)}
-        onCollapse={false}
-        collapsed={false}
+      <ProLayout
+        loading={loading}
+        logo={!collapsed ?
+          <img src={movie} alt="movie" /> :
+          <img src={movie} alt="movie" />
+        }
+        menuHeaderRender={(logoDom, titleDom) => (
+          <Link to="/">{logoDom}</Link>
+        )}
+        siderWidth={200}
+        onCollapse={this.handleMenuCollapse}
+        collapsed={collapsed}
         menuItemRender={(menuItemProps, defaultDom) => {
-          return <Link to={menuItemProps.path.replace(/:id/, id)}>{defaultDom}</Link>;
+          if (menuItemProps.isUrl || menuItemProps.children) {
+            return defaultDom;
+          }
+          return <Link to={`${menuItemProps.path.replace(/:id/, id)}`}>{defaultDom}</Link>;
         }}
-        breadcrumbRender={false}
-        footerRender={false}
-        menuDataRender={this.menuDataRender}
-        formatMessage={formatMessage}
+        breadcrumbRender={(routers = []) => {
+          return [
+            {
+              path: '/',
+              breadcrumbName: '首页',
+            },
+            ...routers
+          ];
+        }}
+        itemRender={(itemRoute) => <span>{itemRoute.breadcrumbName}</span>}
+        footerRender={() => null}
+        menuDataRender={() => (route.routeLocal ? route.routes : menuData)}
         rightContentRender={rightProps => <RightContent {...rightProps} />}
-        {...this.props}
-        {...settings}
+        {..._setting}
       >
-        {children}
-      </ProLayoutComponents>
+        {route.hidePageHeader ? children : <PageHeaderWrapper>{children}</PageHeaderWrapper>}
+      </ProLayout>
     )
   }
 }

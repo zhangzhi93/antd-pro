@@ -1,6 +1,6 @@
+import { Button, message, notification } from 'antd';
 import React from 'react';
-import { notification, Button, message } from 'antd';
-import { formatMessage } from 'umi-plugin-react/locale';
+import { formatMessage } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 
 const { pwa } = defaultSettings; // if pwa is true
@@ -11,7 +11,7 @@ if (pwa) {
     message.warning(
       formatMessage({
         id: 'app.pwa.offline',
-      }),
+      })
     );
   }); // Pop up a prompt on the page asking the user if they want to use the latest version
 
@@ -24,7 +24,7 @@ if (pwa) {
       const worker = e.detail && e.detail.waiting;
 
       if (!worker) {
-        return Promise.resolve();
+        return true;
       } // Send skip-waiting event to waiting SW with MessageChannel
 
       await new Promise((resolve, reject) => {
@@ -42,7 +42,7 @@ if (pwa) {
           {
             type: 'skip-waiting',
           },
-          [channel.port2],
+          [channel.port2]
         );
       }); // Refresh current page to use the updated HTML and other assets after SW has skiped waiting
 
@@ -73,12 +73,17 @@ if (pwa) {
       }),
       btn,
       key,
-      onClose: async () => {},
+      onClose: async () => { },
     });
   });
 } else if ('serviceWorker' in navigator) {
-  // eslint-disable-next-line compat/compat
-  navigator.serviceWorker.ready.then(registration => {
-    registration.unregister();
-  });
+
+  navigator.serviceWorker.ready
+    .then(registration => {
+      registration.unregister();
+      return true;
+    })
+    .catch(() => {
+      console.log('serviceWorker unregister error');
+    });
 }
